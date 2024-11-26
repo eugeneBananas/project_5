@@ -1,0 +1,124 @@
+openapi: 3.0.1
+info:
+  title: Contacts API
+  description: API для управления контактами
+  version: 1.0.0
+servers:
+  - url: https://project-5-4tck.onrender.com
+    description: Продакшн сервер
+
+paths:
+  /contacts:
+    get:
+      summary: Получить список контактов
+      responses:
+        '200':
+          description: Успешное получение списка контактов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+        '500':
+          description: Ошибка сервера
+    post:
+      summary: Создать новый контакт
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewContact'
+      responses:
+        '201':
+          description: Контакт успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '400':
+          description: Неверный запрос
+
+  /contacts/{id}:
+    put:
+      summary: Обновить контакт
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID контакта
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewContact'
+      responses:
+        '200':
+          description: Контакт успешно обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '400':
+          description: Неверный запрос
+    delete:
+      summary: Удалить контакт
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID контакта
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Контакт успешно удален
+        '500':
+          description: Ошибка сервера
+
+  /:
+    delete:
+      summary: Удалить все контакты
+      responses:
+        '204':
+          description: Все контакты удалены
+        '500':
+          description: Ошибка сервера
+
+components:
+  schemas:
+    Contact:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Уникальный идентификатор контакта
+        name:
+          type: string
+          description: Имя контакта
+        phone:
+          type: string
+          description: Телефонный номер контакта
+        email:
+          type: string
+          description: Электронная почта контакта
+    NewContact:
+      type: object
+      required:
+        - name
+        - phone
+        - email
+      properties:
+        name:
+          type: string
+          description: Имя контакта
+        phone:
+          type: string
+          description: Телефонный номер контакта
+        email:
+          type: string
+          description: Электронная почта контакта

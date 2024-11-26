@@ -6,18 +6,17 @@ services:
     ports:
       - "5000:5000"
     environment:
-      # - MONGO_URI=mongodb://mongo:27017/contact-manager
-      - MONGO_URI=mongodb+srv://user:KkLYVrwP5E1a5eNZ@cluster0.7u38o.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - MONGO_URI=mongodb://mongo:27017/contact-manager
       - PORT=5000
     depends_on:
       - mongo
 
-#   mongo:
-#     image: mongo:8.0.1-noble
-#     ports:
-#       - "27017:27017"
-#     volumes:
-#       - mongo_data:/data/db
+  mongo:
+    image: mongo:8.0.1-noble
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
 
-# volumes:
-#   mongo_data:
+volumes:
+  mongo_data:
