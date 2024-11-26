@@ -4,12 +4,12 @@ const Contact = require('./models/contact');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
-// Middleware
+
 app.use(express.json());
 
-// Подключение к MongoDB
+
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -17,8 +17,7 @@ mongoose.connect(process.env.MONGO_URI, {
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
-// REST API для контактов
-// Получение всех контактов
+
 app.get('/contacts', async (req, res) => {
   try {
     const contacts = await Contact.find();
@@ -28,7 +27,7 @@ app.get('/contacts', async (req, res) => {
   }
 });
 
-// Создание нового контакта
+
 app.post('/contacts', async (req, res) => {
   const { name, phone, email } = req.body;
   const newContact = new Contact({ name, phone, email });
@@ -40,7 +39,16 @@ app.post('/contacts', async (req, res) => {
   }
 });
 
-// Обновление контакта
+app.delete('/', async (req, res) => {
+  try {
+    await Contact.deleteMany();
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
 app.put('/contacts/:id', async (req, res) => {
   const { id } = req.params;
   const { name, phone, email } = req.body;
@@ -52,7 +60,7 @@ app.put('/contacts/:id', async (req, res) => {
   }
 });
 
-// Удаление контакта
+
 app.delete('/contacts/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -63,7 +71,7 @@ app.delete('/contacts/:id', async (req, res) => {
   }
 });
 
-// Запуск сервера
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
